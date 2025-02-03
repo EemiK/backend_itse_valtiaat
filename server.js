@@ -103,7 +103,7 @@ app.post("/api/sheet/:id", async (req, res) => {
         if (pointsIndex === -1) return res.status(400).json({ error: "Column 'Points' not found" });
 
         let currentPoints = parseInt(data[rowIndex][pointsIndex] || "0", 10);
-        currentPoints += 1;
+        currentPoints += req.body.add;
 
         await sheets.spreadsheets.values.update({
             spreadsheetId: SPREADSHEET_ID,
