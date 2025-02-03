@@ -1,7 +1,6 @@
 const express = require("express");
 const { google } = require("googleapis");
 const cors = require("cors");
-const fs = require("fs");
 
 require("dotenv").config();
 
@@ -117,4 +116,6 @@ app.post("/api/sheet/:id", async (req, res) => {
     }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+// Use the PORT environment variable (Render automatically assigns a port)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
