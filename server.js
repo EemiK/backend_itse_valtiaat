@@ -1,6 +1,7 @@
 const express = require("express");
 const { google } = require("googleapis");
 const cors = require("cors");
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -8,7 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const credentials = JSON.parse(fs.readFileSync("credentials.json"));
 const auth = new google.auth.GoogleAuth({
+    credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 const sheets = google.sheets({ version: "v4", auth });
@@ -116,6 +119,4 @@ app.post("/api/sheet/:id", async (req, res) => {
     }
 });
 
-// Use the PORT environment variable (Render automatically assigns a port)
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(5000, () => console.log("Server running on port 5000"));
