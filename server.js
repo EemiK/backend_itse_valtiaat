@@ -102,6 +102,12 @@ app.post("/api/sheet/:id", async (req, res) => {
         const pointsIndex = headers.indexOf("Points");
         if (pointsIndex === -1) return res.status(400).json({ error: "Column 'Points' not found" });
 
+        const votesIndex = headers.indexOf("Votes");
+        if (votesIndex === -1) return res.status(400).json({ error: "Column 'Votes' not found" });
+
+        let currentVotes = parseInt(data[rowIndex][votesIndex] || "0", 10);
+        currentVotes += 1;
+
         let currentPoints = parseInt(data[rowIndex][pointsIndex] || "0", 10);
         currentPoints += Number(req.body.score);
 
@@ -110,6 +116,13 @@ app.post("/api/sheet/:id", async (req, res) => {
             range: `data!${String.fromCharCode(65 + pointsIndex)}${rowIndex + 2}`,
             valueInputOption: "RAW",
             resource: { values: [[currentPoints]] },
+        });
+
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `data!${String.fromCharCode(65 + votesIndex)}${rowIndex + 2}`,
+            valueInputOption: "RAW",
+            resource: { values: [[currentVotes]] },
         });
 
         res.json({ message: `Points incremented for ID ${req.params.id}`, newPoints: currentPoints });
