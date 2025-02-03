@@ -9,9 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const credentials = JSON.parse(fs.readFileSync("credentials.json"));
 const auth = new google.auth.GoogleAuth({
-    credentials,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 const sheets = google.sheets({ version: "v4", auth });
